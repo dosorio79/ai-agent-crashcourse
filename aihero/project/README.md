@@ -38,7 +38,10 @@ Located in [`read_algo_python.py`](./read_algo_python.py).
 
 ## ▶️ Usage
 
-Example with a repo that uses `main`:
+For this exercise, the chosen repository is
+👉 [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python)
+
+⚠️ Note: its default branch is `master`.
 
 ```bash
-python aihero/project/read_algo_python.py --owner DataTalksClub --repo faq
+python aihero/project/read_algo_python.py --owner TheAlgorithms --repo Python --branch master
