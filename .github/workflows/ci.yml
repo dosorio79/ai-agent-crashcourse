@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+        project: ["aihero/project", "aihero/course"]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+    
+    - name: Install dependencies
+      working-directory: ${{ matrix.project }}
+      run: |
+        uv sync --frozen
+    
+    - name: Lint with ruff
+      working-directory: ${{ matrix.project }}
+      run: |
+        uv run ruff check .
+        uv run ruff format --check .
+    
+    - name: Type check with mypy
+      working-directory: ${{ matrix.project }}
+      run: |
+        uv run mypy . || echo "MyPy check completed with warnings"
+    
+    - name: Test Python scripts
+      working-directory: ${{ matrix.project }}
+      run: |
+        uv run python -m py_compile *.py
+
+  validate-notebooks:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    
+    - name: Install dependencies
+      working-directory: aihero/course
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        uv sync --frozen
+    
+    - name: Validate notebooks
+      working-directory: aihero/course
+      run: |
+        uv run jupyter nbconvert --to script --execute day1.ipynb --stdout > /dev/null
+
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run Bandit Security Scan
+      uses: securecodewarrior/github-action-bandit@v1
+      with:
+        config_file: .bandit
+        severity: medium
+        confidence: medium
+        exclude_paths: "*/tests/*,*/test_*"

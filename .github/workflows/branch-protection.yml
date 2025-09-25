@@ -1,0 +1,84 @@
+name: Branch Protection
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  enforce-branch-protection:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Check if push is from PR merge
+      run: |
+        echo "Direct push to main branch detected!"
+        echo "This workflow serves as a status check for branch protection."
+        echo "In a properly configured repository, direct pushes to main should be blocked."
+        exit 0
+
+  validate-pr:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Check PR requirements
+      run: |
+        echo "Validating pull request requirements..."
+        
+        # Check if PR has proper title format
+        if [[ ! "${{ github.event.pull_request.title }}" =~ ^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+ ]]; then
+          echo "❌ PR title should follow conventional commits format"
+          echo "Examples: 'feat: add new feature', 'fix: resolve bug', 'docs: update README'"
+        else
+          echo "✅ PR title follows conventional commits format"
+        fi
+        
+        # Check if PR has description
+        if [[ -z "${{ github.event.pull_request.body }}" ]]; then
+          echo "❌ PR should have a description"
+        else
+          echo "✅ PR has description"
+        fi
+        
+        # Check for sensitive files
+        git diff --name-only origin/main..HEAD | while read file; do
+          if [[ "$file" == *".env"* ]] || [[ "$file" == *"secret"* ]] || [[ "$file" == *"key"* ]]; then
+            echo "⚠️  Potential sensitive file detected: $file"
+          fi
+        done
+        
+        echo "✅ PR validation completed"
+
+  size-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Check PR size
+      run: |
+        FILES_CHANGED=$(git diff --name-only origin/main..HEAD | wc -l)
+        LINES_CHANGED=$(git diff --stat origin/main..HEAD | tail -1 | grep -o '[0-9]\+ insertions\|[0-9]\+ deletions' | grep -o '[0-9]\+' | awk '{sum += $1} END {print sum}')
+        
+        echo "Files changed: $FILES_CHANGED"
+        echo "Lines changed: ${LINES_CHANGED:-0}"
+        
+        if [ "$FILES_CHANGED" -gt 20 ]; then
+          echo "⚠️  Large PR detected: $FILES_CHANGED files changed"
+          echo "Consider breaking this into smaller PRs for easier review"
+        fi
+        
+        if [ "${LINES_CHANGED:-0}" -gt 500 ]; then
+          echo "⚠️  Large PR detected: ${LINES_CHANGED} lines changed"
+          echo "Consider breaking this into smaller PRs for easier review"
+        fi

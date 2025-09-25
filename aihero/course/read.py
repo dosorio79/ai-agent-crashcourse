@@ -1,9 +1,12 @@
 import io
 import zipfile
-import requests
-import frontmatter
+from typing import Any, Dict, List
 
-def read_repo_data(repo_owner, repo_name, prefix):
+import frontmatter
+import requests
+
+
+def read_repo_data(repo_owner: str, repo_name: str, prefix: str) -> List[Dict[str, Any]]:
     """
     Downloads and extracts Markdown (.md, .mdx) files from a GitHub repository's main branch zip archive,
     parses their frontmatter, and returns a list of dictionaries containing the parsed data and filenames.
@@ -21,12 +24,12 @@ def read_repo_data(repo_owner, repo_name, prefix):
     """
 
     url = f"{prefix}/{repo_owner}/{repo_name}/zip/refs/heads/main"
-    response = requests.get(url)
+    response = requests.get(url, timeout=30)
 
     if response.status_code != 200:
         raise Exception(f"Failed to download repository: {response.status_code}")
 
-    repository_data = []
+    repository_data: List[Dict[str, Any]] = []
     zf = zipfile.ZipFile(io.BytesIO(response.content))
     # Iterate through each file in the zip
     for file_info in zf.infolist():

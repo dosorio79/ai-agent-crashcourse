@@ -1,0 +1,18 @@
+[bandit]
+exclude_dirs = [
+    "./tests",
+    "./test_*",
+    "./.git",
+    "./.venv",
+    "./venv",
+    "./__pycache__"
+]
+
+skips = [
+    "B101",  # Skip test for use of assert
+    "B601"   # Skip paramiko calls (if using paramiko legitimately)
+]
+
+# Set confidence levels
+confidence = 3  # HIGH confidence
+severity = 2    # MEDIUM severity

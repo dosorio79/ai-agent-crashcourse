@@ -1,8 +1,10 @@
-from read import read_repo_data
 import argparse
 from pprint import pprint
 
-def read_algo_python():
+from read import read_repo_data
+
+
+def read_algo_python() -> None:
     """
     Parses command-line arguments to specify a GitHub repository and branch, reads the repository data,
     and prints the number of FAQ documents along with the first two entries.
@@ -25,7 +27,11 @@ def read_algo_python():
     args = parser.parse_args()
     repo_data = read_repo_data(args.owner, args.repo, branch=args.branch)
     print(f"FAQ documents: {len(repo_data)}")
-    pprint(repo_data[0])
+    if repo_data:
+        pprint(repo_data[0])
+    else:
+        print("No documents found.")
+
 
 if __name__ == "__main__":
     read_algo_python()
