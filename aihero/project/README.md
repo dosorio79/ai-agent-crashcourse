@@ -54,7 +54,7 @@ For this exercise, the chosen repository is
 
 ```bash
 python aihero/project/read_algo_python.py --owner TheAlgorithms --repo Python --branch master
-
+```
 ---
 
 # Day 2 — Chunking Documents
