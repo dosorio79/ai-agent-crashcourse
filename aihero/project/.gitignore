@@ -1,0 +1,51 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# --- Environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Dependency / Build ---
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*~
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# --- Logs ---
+*.log
+logs/
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- Project-specific ---
+# Secrets
+.env
+.env.*
+
+# uv lockfiles (optional to ignore, keep if you want reproducibility)
+# uv.lock
+
+# Data / Outputs
+*.jsonl
+data/
+outputs/
