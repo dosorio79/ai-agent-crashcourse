@@ -36,6 +36,7 @@ logs/
 # --- OS files ---
 .DS_Store
 Thumbs.db
+.python-version
 
 # --- Project-specific ---
 # Secrets
