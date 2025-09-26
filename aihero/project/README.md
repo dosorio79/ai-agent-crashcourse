@@ -11,7 +11,7 @@ Each day adds new functionality toward building an ingestion and retrieval pipel
 
 ---
 
-# Day 1 — Ingest and Index Your Data
+# Day 1 - Ingest and Index Your Data
 
 ## 📌 Goal
 Download and parse Markdown files from a GitHub repository, extract their frontmatter and content, and make them available as Python dictionaries.
@@ -59,7 +59,7 @@ python aihero/project/read_algo_python.py --owner TheAlgorithms --repo Python --
 ```
 ---
 
-# Day 2 — Chunking Documents
+# Day 2 - Chunking Documents
 
 ## 📌 Goal
 Split large documents into smaller, self-contained chunks so they can later be embedded and indexed effectively.
