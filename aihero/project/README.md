@@ -33,6 +33,8 @@ Located in [`read_algo_python.py`](./read_algo_python.py).
   - `--repo` → Repository name (required)
   - `--branch` → Branch (default: `main`)
 - Prints the number of parsed Markdown documents and pretty-prints the first two entries.
+- For Day 1, the script **only prints** the results as a demo.  
+  (Later will return and save the data for indexing.)
 
 ---
 
