@@ -17,8 +17,6 @@ Each day adds new functionality toward building an ingestion and retrieval pipel
 Download and parse Markdown files from a GitHub repository, extract their frontmatter and content, and make them available as Python dictionaries.
 This sets the foundation for indexing and querying the docs in later steps.
 
----
-
 ## 🛠️ Functions Implemented
 
 ### `read_repo_data`
@@ -49,8 +47,6 @@ Located in [`read_algo_python.py`](./read_algo_python.py).
 - For Day 1, the script **only prints** the results as a demo.
   (Later will return and save the data for indexing.)
 
----
-
 ## ▶️ Usage
 
 For this exercise, the chosen repository is
@@ -67,8 +63,6 @@ python aihero/project/read_algo_python.py --owner TheAlgorithms --repo Python --
 
 ## 📌 Goal
 Split large documents into smaller, self-contained chunks so they can later be embedded and indexed effectively.
-
----
 
 ## 🛠️ Functions Implemented
 
@@ -98,8 +92,6 @@ Located in [`chunking_repo.py`](./chunking_repo.py).
   - `--size` and `--step` → used in simple/sliding
   - `--level` → used in section-based splitting
 - Prints the total number of chunks and the first two as examples.
-
----
 
 ## ▶️ Usage
 
