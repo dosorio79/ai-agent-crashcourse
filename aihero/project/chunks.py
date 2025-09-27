@@ -1,7 +1,9 @@
 import re
 from typing import List, Dict, Any, Literal
+from utils import save_chunks_jsonl
 
-def simple_chunking(text: str, size: int) -> List[Dict[str, Any]]:
+
+def simple_chunking(text: str, size: int, save: bool = False) -> List[Dict[str, Any]]:
     """Chunk text into non-overlapping chunks of a given size.
 
     Args:
@@ -17,11 +19,13 @@ def simple_chunking(text: str, size: int) -> List[Dict[str, Any]]:
     result: List[Dict[str, Any]] = []
     for i in range(0, len(text), size):
         chunk = text[i:i + size]
-        result.append({'start': i, 'end': i + size, 'chunk': chunk})
+        result.append({'start': i, 'end': min(i + size, len(text)), 'chunk': chunk})
+    if save:
+        save_chunks_jsonl(result, "chunks.jsonl")
     return result
 
 
-def sliding_window_chunking(text: str, size: int, step: int) -> List[Dict[str, Any]]:
+def sliding_window_chunking(text: str, size: int, step: int, save: bool = False) -> List[Dict[str, Any]]:
     """Chunk text using a sliding window approach.
 
     Args:
@@ -41,13 +45,15 @@ def sliding_window_chunking(text: str, size: int, step: int) -> List[Dict[str, A
     result: List[Dict[str, Any]] = []
     for i in range(0, len(text), step):
         chunk = text[i:i + size]
-        result.append({'start': i, 'end': i + size, 'chunk': chunk})
+        result.append({'start': i, 'end': min(i + size, len(text)), 'chunk': chunk})
         if i + size >= len(text):  # reached the end
             break
+    if save:
+        save_chunks_jsonl(result, "chunks.jsonl")
     return result
 
 
-def paragraph_chunking(text: str) -> List[Dict[str, Any]]:
+def paragraph_chunking(text: str, save: bool = False) -> List[Dict[str, Any]]:
     """Split text into paragraphs based on double newlines.
 
     Args:
@@ -66,10 +72,12 @@ def paragraph_chunking(text: str) -> List[Dict[str, Any]]:
         end = start + len(p)
         result.append({'start': start, 'end': end, 'chunk': p})
         start = end + 2  # account for skipped newlines
+    if save:
+        save_chunks_jsonl(result, "chunks.jsonl")
     return result
 
 
-def markdown_section_chunking(text: str, level: int = 2) -> List[Dict[str, Any]]:
+def markdown_section_chunking(text: str, level: int = 2, save: bool = False) -> List[Dict[str, Any]]:
     """Split markdown text into sections based on header levels.
 
     Args:
@@ -92,6 +100,8 @@ def markdown_section_chunking(text: str, level: int = 2) -> List[Dict[str, Any]]
         end = start + len(section_text)
         result.append({'start': start, 'end': end, 'chunk': section_text})
         start = end
+    if save:
+        save_chunks_jsonl(result, "chunks.jsonl")
     return result
 
 def chunk_text(
@@ -99,7 +109,8 @@ def chunk_text(
     method: Literal["simple", "sliding", "paragraph", "markdown"],
     size: int = 2000,
     step: int = 1000,
-    level: int = 2
+    level: int = 2,
+    save: bool = False
 ) -> List[Dict[str, Any]]:
     """Dispatch to a chosen chunking strategy.
 
@@ -114,12 +125,12 @@ def chunk_text(
         list: List of dicts with 'start', 'end', and 'chunk' keys.
     """
     if method == "simple":
-        return simple_chunking(text, size)
+        return simple_chunking(text, size, save)
     elif method == "sliding":
-        return sliding_window_chunking(text, size, step)
+        return sliding_window_chunking(text, size, step, save)
     elif method == "paragraph":
-        return paragraph_chunking(text)
+        return paragraph_chunking(text, save)
     elif method == "section":
-        return markdown_section_chunking(text, level)
+        return markdown_section_chunking(text, level, save)
     else:
         raise ValueError(f"Unknown method: {method}")
