@@ -55,10 +55,10 @@ python aihero/project/read_repo.py --owner TheAlgorithms --repo Python --branch 
 
 # Day 2 — Chunking Documents
 
-## Goal
+## 📌 Goal
 Split large documents into smaller, self-contained chunks so they can later be embedded and indexed effectively.
 
-## Functions Implemented
+## 🛠️ Functions Implemented
 
 ### `simple_chunking`, `sliding_window_chunking`, `split_by_paragraphs`, `split_markdown_by_level`
 **Location:** `./chunks.py`
@@ -77,8 +77,8 @@ All return a list of dicts:
 **Location:** `./chunks.py`
 Selects any of the above methods via a single function.
 
-### `io helpers` (optional)
-**Location:** `./io.py`
+### `io helpers`
+**Location:** `./utils.py`
 - `save_chunks_jsonl(chunks, path, ensure_ascii=False)`
 - `load_chunks_jsonl(path)`
 
@@ -90,11 +90,11 @@ Args:
 - `--method` → `simple` | `sliding` | `paragraph` | `section`
 - `--size`, `--step` (for simple/sliding)
 - `--level` (for section split)
-- `--save-json` (optional: save chunks as JSONL)
+- `--save_json` (optional: if used without argument, saves to `chunks.jsonl`; if a string is provided, that is used as the filename)
 
 Prints total chunks and first two examples.
 
-## Usage
+## ▶️ Usage
 
 Using **TheAlgorithms/Python** (branch `master`):
 
@@ -111,17 +111,20 @@ python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch
 # Sections (## level)
 python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch master --method section --level 2
 
-# Save chunks for Day 3
-python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch master --method section --level 2 --save-json chunks.jsonl
+# Save chunks (default filename chunks.jsonl)
+python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch master --method section --save_json
+
+# Save chunks to custom filename
+python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch master --method section --save-json file_name.jsonl
 ```
 ---
 
 # Day 3 — Search
 
-## Goal
+## 📌 Goal
 Add lexical (text), vector (semantic), and hybrid search on top of chunked documents.
 
-## Functions Implemented
+## 🛠️ Functions Implemented
 
 **Location:** `./search.py`
 
@@ -130,30 +133,70 @@ Add lexical (text), vector (semantic), and hybrid search on top of chunked docum
 - `create_vector_index(chunks, model, text_field="chunk")` — build a vector index with `minsearch.VectorSearch`
 - `text_search(index, query, top_k=5)` — keyword search
 - `vector_search(vindex, model, query, top_k=5)` — semantic search
-- `hybrid_search(index, vindex, model, query, top_k=5)` — combine & deduplicate results (by filename)
-
-## CLI
+- `hybrid_search(index, vindex, model, query, top_k=5)` — combine & deduplicate results
 
 ### `search_repo` (CLI)
 **Location:** `./search_repo.py`
 
 Args:
-- `--chunks-file` — path to JSONL produced on Day 2
+- `--chunks-file` — path to JSONL file produced by Day 2 (`--save-json`)
 - `--mode` — `text` | `vector` | `hybrid`
-- `--query` — query string
+- `--query` — search query string
 - `--top-k` — number of results (default: 5)
 
-Prints filename, snippet, and score (if available).
+Prints the top results with filename, snippet, and score (if available).
 
-## Usage
+---
+
+## ▶️ Usage
+
+First, create chunks with Day 2 CLI and save them:
 
 ```bash
+python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch master --method section --save-json
+```
+
+This produces a chunks.jsonl file.
+Now, run different search strategies on those chunks:
+```bash
 # Text search
-python aihero/project/search_repo.py --chunks-file chunks.jsonl --mode text --query "binary search"
+python aihero/project/search_repo.py --chunks-file chunks.jsonl --mode text --query "your query"
 
 # Vector search
-python aihero/project/search_repo.py --chunks-file chunks.jsonl --mode vector --query "binary search"
+python aihero/project/search_repo.py --chunks-file chunks.jsonl --mode vector --query "your query"
 
 # Hybrid search
-python aihero/project/search_repo.py --chunks-file chunks.jsonl --mode hybrid --query "binary search"
+python aihero/project/search_repo.py --chunks-file chunks.jsonl --mode hybrid --query "your query"
+```
+
+---
+
+🔄 Main Changes to Previous Days
+
+Day 2 (chunk_repo.py)
+
+- Extended chunking to cover all documents in the repository (not just the first one).
+- Added saving support (--save-json) so all chunks can be persisted to disk.
+- New utility functions in utils.py
+  - save_chunks_jsonl and load_chunks_jsonl handle saving and loading of chunks to JSONL format.
+
+---
+
+🧪 Testing from Chunking to Search
+
+1. TheAlgorthms repo
+```bash
+# Create chunks (use level 1 has most markdowns have only level 1 and refs in levels 2)
+python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch master --method section --level 1 --save-json algo_chunks.jsonl
+# Run vector search
+python aihero/project/search_repo.py --chunks-file algo_chunks.jsonl --mode vector --query "What are the main sorting orders?"
+```
+
+2. LangChain repo
+```bash
+# Create chunks
+python aihero/project/chunk_repo.py --owner langchain-ai --repo langchain --branch master --method section --level 2 --save-json langchain_chunks.jsonl
+
+# Run vector search
+python aihero/project/search_repo.py --chunks-file langchain_chunks.jsonl --mode vector --query "What are the main chunking methods available?"~
 ```

@@ -1,5 +1,6 @@
 import json
 
+
 def save_chunks_jsonl(chunks, filepath):
     """
     Save a list of chunks to a JSONL (JSON Lines) file.
@@ -11,6 +12,7 @@ def save_chunks_jsonl(chunks, filepath):
     with open(filepath, 'w', encoding='utf-8') as f:
         for chunk in chunks:
             f.write(json.dumps(chunk, ensure_ascii=False) + "\n")
+
 
 def load_chunks_jsonl(filepath):
     """

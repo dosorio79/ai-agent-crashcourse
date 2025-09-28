@@ -37,7 +37,7 @@ def read_repo_data(repo_owner, repo_name, prefix="https://codeload.github.com", 
         try:
             # Read and parse each file
             with zf.open(file_info) as f_in:
-                content = f_in.read()
+                content = f_in.read().decode("utf-8", errors="ignore")
                 post = frontmatter.loads(content)
                 data = post.to_dict()
                 data['filename'] = filename

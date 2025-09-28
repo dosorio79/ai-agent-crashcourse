@@ -108,6 +108,7 @@ def vector_search(
     query_vec = embed_text(query, model)
     return vindex.search(query_vec, num_results=top_k)
 
+
 def hybrid_search(
     index: Index,
     vindex: VectorSearch,

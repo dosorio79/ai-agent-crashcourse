@@ -9,6 +9,7 @@ from search import (
     hybrid_search,
 )
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Search chunks with text, vector, or hybrid mode")
     parser.add_argument("--chunks-file", required=True, help="Path to chunks JSONL file")
@@ -16,6 +17,7 @@ def parse_args():
     parser.add_argument("--query", required=True, help="Search query string")
     parser.add_argument("--top-k", type=int, default=5, help="Number of results to return")
     return parser.parse_args()
+
 
 def main():
     args = parse_args()
@@ -36,7 +38,7 @@ def main():
         print(f"\nResult {i}")
         print(f"File: {r.get('filename')}")
         print(f"Snippet: {r.get('chunk', '')[:200]}")
-        print(f"Score: {r.get('score', 'N/A')}")
+        print("---")
 
 
 if __name__ == "__main__":
