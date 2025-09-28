@@ -17,7 +17,6 @@ def parse_args():
     parser.add_argument("--top-k", type=int, default=5, help="Number of results to return")
     return parser.parse_args()
 
-
 def main():
     args = parse_args()
 
