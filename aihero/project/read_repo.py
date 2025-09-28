@@ -27,5 +27,6 @@ def main():
     print(f"FAQ documents: {len(repo_data)}")
     pprint(repo_data[0])
 
+
 if __name__ == "__main__":
     main()
