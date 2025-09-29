@@ -1,7 +1,11 @@
 import json
+import yaml
+from typing import List, Dict, Any
 
 
-def save_chunks_jsonl(chunks, filepath):
+from typing import List, Dict, Any
+
+def save_chunks_jsonl(chunks: List[Dict[str, Any]], filepath: str):
     """
     Save a list of chunks to a JSONL (JSON Lines) file.
 
@@ -14,7 +18,7 @@ def save_chunks_jsonl(chunks, filepath):
             f.write(json.dumps(chunk, ensure_ascii=False) + "\n")
 
 
-def load_chunks_jsonl(filepath):
+def load_chunks_jsonl(filepath: str) -> List[Dict[str, Any]]:
     """
     Load chunks from a JSONL (JSON Lines) file.
 
@@ -26,3 +30,17 @@ def load_chunks_jsonl(filepath):
     """
     with open(filepath, 'r', encoding='utf-8') as f:
         return [json.loads(line) for line in f.readlines()]
+
+
+def load_yaml_config(path: str) -> Dict[str, Any]:
+    """
+    Load a YAML config file.
+
+    Args:
+        path (str): Path to the YAML file.
+
+    Returns:
+        dict: Parsed configuration.
+    """
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
