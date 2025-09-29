@@ -1,4 +1,4 @@
-# AI Agent Crashcourse — Project
+# AI Agent Crashcourse -Project
 
 This folder contains the code developed day by day following the AI Agent Crashcourse.
 Each day adds new functionality toward building an ingestion and retrieval pipeline.
@@ -13,7 +13,7 @@ Each day adds new functionality toward building an ingestion and retrieval pipel
 
 ---
 
-# Day 1 — Ingest and Index Your Data
+# Day 1 - Ingest and Index Your Data
 
 ## Goal
 Download and parse Markdown files from a GitHub repository, extract their frontmatter and content, and make them available as Python dictionaries. This lays the foundation for later indexing and search.
@@ -25,16 +25,16 @@ Download and parse Markdown files from a GitHub repository, extract their frontm
 
 - Downloads a GitHub repository as a zip archive (via `https://codeload.github.com`).
 - Parameters:
-  - `repo_owner` — GitHub org/user
-  - `repo_name` — Repository name
-  - `prefix` — Download base URL (default: `https://codeload.github.com`)
-  - `branch` — Branch to fetch (default: `main`)
+  - `repo_owner` -GitHub org/user
+  - `repo_name` -Repository name
+  - `prefix` -Download base URL (default: `https://codeload.github.com`)
+  - `branch` -Branch to fetch (default: `main`)
 - Extracts `.md` / `.mdx` files only.
 - Parses YAML frontmatter with `python-frontmatter`.
 - Returns a list of dicts with:
   - frontmatter keys
-  - `content` — Markdown body
-  - `filename` — path inside the repo archive
+  - `content` -Markdown body
+  - `filename` -path inside the repo archive
 
 ### `read_repo` (CLI)
 **Location:** `./read_repo.py`
@@ -55,7 +55,7 @@ python aihero/project/read_repo.py --owner TheAlgorithms --repo Python --branch 
 ```
 ---
 
-# Day 2 — Chunking Documents
+# Day 2 - Chunking Documents
 
 ## 📌 Goal
 Split large documents into smaller, self-contained chunks so they can later be embedded and indexed effectively.
@@ -65,15 +65,15 @@ Split large documents into smaller, self-contained chunks so they can later be e
 ### `simple_chunking`, `sliding_window_chunking`, `split_by_paragraphs`, `split_markdown_by_level`
 **Location:** `./chunks.py`
 
-- `simple_chunking` — fixed, non-overlapping windows
-- `sliding_window_chunking` — overlapping windows to preserve context
-- `split_by_paragraphs` — split on blank lines (`\n\n`)
-- `split_markdown_by_level` — split by Markdown headers (default: `##`)
+- `simple_chunking` -fixed, non-overlapping windows
+- `sliding_window_chunking` -overlapping windows to preserve context
+- `split_by_paragraphs` -split on blank lines (`\n\n`)
+- `split_markdown_by_level` -split by Markdown headers (default: `##`)
 
 All return a list of dicts:
-- `start` — start char offset
-- `end` — end char offset
-- `chunk` — text content
+- `start` -start char offset
+- `end` -end char offset
+- `chunk` -text content
 
 ### `chunk_text` (dispatcher)
 **Location:** `./chunks.py`
@@ -121,7 +121,7 @@ python aihero/project/chunk_repo.py --owner TheAlgorithms --repo Python --branch
 ```
 ---
 
-# Day 3 — Search
+# Day 3 - Search
 
 ## 📌 Goal
 Add lexical (text), vector (semantic), and hybrid search on top of chunked documents.
@@ -130,21 +130,21 @@ Add lexical (text), vector (semantic), and hybrid search on top of chunked docum
 
 **Location:** `./search.py`
 
-- `create_text_index(chunks)` — build a text index with `minsearch.Index`
-- `load_embedding_model(model_name)` — load SentenceTransformer (default: `multi-qa-distilbert-cos-v1`)
-- `create_vector_index(chunks, model, text_field="chunk")` — build a vector index with `minsearch.VectorSearch`
-- `text_search(index, query, top_k=5)` — keyword search
-- `vector_search(vindex, model, query, top_k=5)` — semantic search
-- `hybrid_search(index, vindex, model, query, top_k=5)` — combine & deduplicate results
+- `create_text_index(chunks)` -build a text index with `minsearch.Index`
+- `load_embedding_model(model_name)` -load SentenceTransformer (default: `multi-qa-distilbert-cos-v1`)
+- `create_vector_index(chunks, model, text_field="chunk")` -build a vector index with `minsearch.VectorSearch`
+- `text_search(index, query, top_k=5)` -keyword search
+- `vector_search(vindex, model, query, top_k=5)` -semantic search
+- `hybrid_search(index, vindex, model, query, top_k=5)` -combine & deduplicate results
 
 ### `search_repo` (CLI)
 **Location:** `./search_repo.py`
 
 Args:
-- `--chunks-file` — path to JSONL file produced by Day 2 (`--save-json`)
-- `--mode` — `text` | `vector` | `hybrid`
-- `--query` — search query string
-- `--top-k` — number of results (default: 5)
+- `--chunks-file` -path to JSONL file produced by Day 2 (`--save-json`)
+- `--mode` -`text` | `vector` | `hybrid`
+- `--query` -search query string
+- `--top-k` -number of results (default: 5)
 
 Prints the top results with filename, snippet, and score (if available).
 
@@ -202,7 +202,7 @@ python aihero/project/chunk_repo.py --owner langchain-ai --repo langchain --bran
 # Run vector search
 python aihero/project/search_repo.py --chunks-file langchain_chunks.jsonl --mode vector --query "What are the main chunking methods available?"~
 ```
-# Day 4 — Agent
+# Day 4 - Agent and tools
 
 ## 📌 Goal
 Build an agent that uses the search tools to answer questions strictly from repository documentation.
@@ -215,8 +215,8 @@ Wraps the search functions (`text_search`, `vector_search`, `hybrid_search`) so 
 
 ### `create_agent` / `run_agent`
 **Location:** `./agent.py`
-- `create_agent(system_prompt_path, model_name, tools)` — builds a Pydantic AI agent with a system prompt and the selected tool(s).
-- `run_agent(agent, user_question)` — runs the agent with the given query.
+- `create_agent(system_prompt_path, model_name, tools)` -builds a Pydantic AI agent with a system prompt and the selected tool(s).
+- `run_agent(agent, user_question)` -runs the agent with the given query.
 
 ### System Prompts
 **Location:** `./prompts/`
@@ -227,11 +227,11 @@ Wraps the search functions (`text_search`, `vector_search`, `hybrid_search`) so 
 **Location:** `./agent_repo.py`
 
 Args:
-- `--chunks-file` — path to JSONL file with chunks
-- `--query` — user query string
-- `--prompt` — YAML file with system prompt (default: strict)
-- `--model` — LLM model name (default: gpt-4o-mini)
-- `--tool` — which search tool to expose: `text`, `vector`, `hybrid`
+- `--chunks-file` - path to JSONL file with chunks
+- `--query` - user query string
+- `--prompt` - YAML file with system prompt (default: strict)
+- `--model` - LLM model name (default: gpt-4o-mini)
+- `--tool` - which search tool to expose: `text`, `vector`, `hybrid`
 
 Answers are printed in Markdown, with a **Sources** section listing filenames.
 
