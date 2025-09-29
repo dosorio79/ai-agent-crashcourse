@@ -11,11 +11,12 @@ If you're familiar with **DeepWiki**, it's similar — but tailored to your GitH
 This repository has two main parts:
 
 - **`aihero/`**  
-  The main project folder developed step by step following the [AI Hero course](https://alexeygrigorev.com/aihero/).  
-  Inside, the `project/` subfolder contains the code for ingestion, chunking, search, and the final agent, along with CLIs and system prompts.  
+  The main project folder was developed step by step following the [AI Hero course](https://alexeygrigorev.com/aihero/).  
+  **`project/`** 
+  Contains the code for ingestion, chunking, search, and the final agent, along with CLIs and system prompts.  
   The `aihero/README.md` documents progress day by day.
 
-- **`course/`**  
+  - **`course/`**  
   Contains the course notebooks and personal experiments. This is a sandbox area for testing ideas outside of the main project pipeline.
 
 ---
