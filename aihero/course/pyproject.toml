@@ -9,6 +9,7 @@ dependencies = [
     "google-generativeai>=0.8.5",
     "minsearch>=0.0.5",
     "openai>=1.109.1",
+    "pandas>=2.3.2",
     "pydantic-ai>=1.0.10",
     "python-frontmatter>=1.1.0",
     "requests>=2.32.5",
