@@ -12,7 +12,7 @@ This repository has two main parts:
 
 - **`aihero/`**  
   The main project folder was developed step by step following the [AI Hero course](https://alexeygrigorev.com/aihero/).  
-  **`project/`** 
+  - **`project/`** 
   Contains the code for ingestion, chunking, search, and the final agent, along with CLIs and system prompts.  
   The `aihero/README.md` documents progress day by day.
 
