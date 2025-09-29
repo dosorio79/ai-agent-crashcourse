@@ -9,6 +9,7 @@ Each day adds new functionality toward building an ingestion and retrieval pipel
 - [Day 1 - Ingest and Index Your Data](#day-1--ingest-and-index-your-data)
 - [Day 2 - Chunking Documents](#day-2--chunking-documents)
 - [Day 3 - Search](#day-3--search)
+- [Day 4 - Agent](#day-4--agent)
 
 ---
 
@@ -201,3 +202,49 @@ python aihero/project/chunk_repo.py --owner langchain-ai --repo langchain --bran
 # Run vector search
 python aihero/project/search_repo.py --chunks-file langchain_chunks.jsonl --mode vector --query "What are the main chunking methods available?"~
 ```
+# Day 4 — Agent
+
+## 📌 Goal
+Build an agent that uses the search tools to answer questions strictly from repository documentation.
+
+## 🛠️ Functions Implemented
+
+### `make_agent_tools`
+**Location:** `./agent_tools.py`
+Wraps the search functions (`text_search`, `vector_search`, `hybrid_search`) so they are agent-ready with dependencies bound (indexes + model).
+
+### `create_agent` / `run_agent`
+**Location:** `./agent.py`
+- `create_agent(system_prompt_path, model_name, tools)` — builds a Pydantic AI agent with a system prompt and the selected tool(s).
+- `run_agent(agent, user_question)` — runs the agent with the given query.
+
+### System Prompts
+**Location:** `./prompts/`
+- `system_prompt.yml` - answers only from repo docs, otherwise replies with `"I don't know based on the repository documentation."`
+- `system_prompt_multitry.yml`- allows multiple search tries.
+
+### `agent_repo` (CLI)
+**Location:** `./agent_repo.py`
+
+Args:
+- `--chunks-file` — path to JSONL file with chunks
+- `--query` — user query string
+- `--prompt` — YAML file with system prompt (default: strict)
+- `--model` — LLM model name (default: gpt-4o-mini)
+- `--tool` — which search tool to expose: `text`, `vector`, `hybrid`
+
+Answers are printed in Markdown, with a **Sources** section listing filenames.
+
+---
+
+## ▶️ Usage
+
+Example with LangChain repo:
+
+```bash
+python aihero/project/agent_repo.py \
+  --chunks-file langchain_chunks.jsonl \
+  --tool vector \
+  --query "What are the main chunking methods available?" \
+  --prompt prompts/system_prompt_strict.yml \
+  --model gpt-4o-mini
