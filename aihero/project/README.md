@@ -9,7 +9,7 @@ Each day adds new functionality toward building an ingestion and retrieval pipel
 - [Day 1 - Ingest and Index Your Data](#day-1---ingest-and-index-your-data)
 - [Day 2 - Chunking Documents](#day-2---chunking-documents)
 - [Day 3 - Search](#day-3---search)
-- [Day 4 - Agent](#day-4---agent)
+- [Day 4 - Agent and Tools](#day-4---agent-and-tools)
 
 ---
 
