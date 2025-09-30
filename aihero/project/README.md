@@ -10,6 +10,7 @@ Each day adds new functionality toward building an ingestion and retrieval pipel
 - [Day 2 - Chunking Documents](#day-2---chunking-documents)
 - [Day 3 - Search](#day-3---search)
 - [Day 4 - Agent and Tools](#day-4---agent-and-tools)
+- [Day 5 - Evaluation](#day-5---evaluation)
 
 ---
 
@@ -248,3 +249,69 @@ python aihero/project/agent_repo.py \
   --query "What are the main chunking methods available?" \
   --prompt prompts/system_prompt_strict.yml \
   --model gpt-4o-mini
+
+# Day 5 - Evaluation
+
+## 📌 Goal
+Introduce systematic evaluation of the agent:
+- Define an evaluation set of queries.
+- Run the agent with different tools (text, vector, hybrid).
+- Collect and inspect results.
+- Log interactions for later review and analysis.
+- Add helper functions to streamline evaluation.
+
+This step helps identify failure modes (hallucinations, missed answers) and decide how to improve prompts, chunking, and search strategies.
+
+---
+
+## 🛠️ Functions Implemented
+
+### Logging
+**Location:** `./log.py`
+
+- Creates a `logs/` directory if not present.
+- `log_interaction_to_file(agent, messages, source="user")`
+  - Saves a full agent interaction (agent, messages, metadata) to a uniquely named JSON file.
+  - Filenames include timestamp + random hex for uniqueness.
+  - Custom serializer handles `datetime` → ISO format.
+
+### Evaluation Helpers
+**Location:** `./eval.py`
+
+- `generate_questions_from_chunks(chunks, model, template)`
+  Uses an LLM + a prompt template to automatically generate candidate evaluation questions from your repo chunks.
+
+- `simplify_log_messages(messages)`
+  Cleans up raw agent message logs into a simplified, human-readable format.
+
+- `extract_question_answer(log_record)`
+  Extracts the user’s question and the agent’s answer from a saved log record.
+
+- `evaluate_log_record(log_path, eval_agent)`
+  Loads a single saved interaction log (one question), then calls an **LLM-based evaluation agent** to judge the quality of the answer against expectations.
+  This allows automated, qualitative assessment.
+
+### Prompts & Templates
+**Location:** `./prompts/templates/`
+
+- Prompt templates for generating evaluation questions and for guiding the evaluation agent.
+- System prompts for strict vs. permissive agent behavior.
+
+### Evaluation Notebook
+**Location:** `./notebooks/agent_eval.ipynb`
+
+Exploratory steps:
+1. Load chunks from repo (`algo_chunks.jsonl` / `langchain_chunks.jsonl`).
+2. Build text and vector indexes.
+3. Generate questions from repository chunks
+4. Run agent with different tools (`text`, `vector`, `hybrid`) on generated questions.
+5. Collect answers and evaluate using LLM as a judge
+
+---
+
+## ▶️ Usage
+
+Run evaluation interactively in the notebook:
+
+```bash
+jupyter notebook notebooks/agent_eval.ipynb
