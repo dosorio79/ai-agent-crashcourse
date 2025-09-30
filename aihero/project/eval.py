@@ -126,37 +126,28 @@ def extract_question_answer(messages: list[Dict[str, Any]]) -> tuple[str, str]:
     return question, answer
 
 
-async def evaluate_log_record(
-    eval_agent, log_record: Dict[str, Any]
-) -> EvaluationChecklist:
+async def evaluate_log_record(eval_agent, log_record: Dict[str, Any]) -> EvaluationChecklist:
     """
     Evaluate a single log record using the evaluation agent.
-    Faithful to the tutorial: simplify messages, build XML prompt, run eval agent.
     """
+
     messages = log_record["messages"]
 
-    # Extract question and answer
     question, answer = extract_question_answer(messages)
     if not question or not answer:
-        raise ValueError("Could not extract question or answer from log messages.")
+        raise ValueError("Could not extract question or answer from log messages")
 
-    # System instructions
     instructions = log_record.get("system_prompt", "")
 
-    # Simplify log for token efficiency
-    log_simplified = simplify_log_messages(messages)
-    log_str = json.dumps(log_simplified)
+    simplified_messages = simplify_log_messages(messages)
+    log_json = json.dumps(simplified_messages)
 
-    # Build evaluation prompt
-    user_prompt = user_prompt_template.format(
+    evaluation_prompt = user_prompt_template.format(
         instructions=instructions,
         question=question,
         answer=answer,
-        log=log_str,
+        log=log_json,
     )
 
-    # Run evaluation agent
-    result = await run_agent_async(
-        eval_agent, user_prompt
-    )
+    result = await run_agent_async(eval_agent, evaluation_prompt)
     return result.output

@@ -249,6 +249,7 @@ python aihero/project/agent_repo.py \
   --query "What are the main chunking methods available?" \
   --prompt prompts/system_prompt_strict.yml \
   --model gpt-4o-mini
+```
 
 # Day 5 - Evaluation
 
