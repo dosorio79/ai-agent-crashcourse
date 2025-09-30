@@ -7,10 +7,14 @@ requires-python = ">=3.10"
 dependencies = [
     "dotenv>=0.9.9",
     "google-generativeai>=0.8.5",
+    "ipykernel>=6.30.1",
+    "ipywidgets>=8.1.7",
     "minsearch>=0.0.5",
+    "notebook>=7.4.7",
     "openai>=1.109.1",
     "pydantic-ai>=1.0.10",
     "python-frontmatter>=1.1.0",
     "requests>=2.32.5",
     "sentence-transformers>=5.1.1",
+    "tqdm>=4.67.1",
 ]

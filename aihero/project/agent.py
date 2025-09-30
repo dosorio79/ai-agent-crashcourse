@@ -1,59 +1,59 @@
 import os
-import dotenv
+from typing import List, Dict, Any
 import asyncio
+
 import dotenv
 dotenv.load_dotenv()
-
-from typing import List, Dict, Any, Literal, Union
 
 from pydantic_ai import Agent
 from utils import load_yaml_config
 
 
 def create_agent(
-    system_prompt_path: str,
+    prompt_file_path: str,
     model_name: str = "gpt-4o-mini",
-    tools: List[Any] = None,
+    tools: List[Any] | None = None,
     agent_name: str = "Agent",
+    **kwargs
 ) -> Agent:
     """
-    Create a Pydantic AI agent with a system prompt and optional tools.
+    Create a Pydantic AI agent with a system or evaluation prompt and optional tools.
+
+    The YAML prompt file must contain a top-level 'instructions' key.
 
     Args:
-        system_prompt_path (str): Path to YAML file containing the system prompt.
-        model_name (str): Name of the LLM model to use.
-        tools (List[Any], optional): Python callables to expose as tools. Defaults to None.
-        agent_name (str): Name of the agent. Defaults to "Agent".
+        prompt_file_path (str): Path to YAML file containing the prompt.
+        model_name (str): Name of the LLM model to use (default: gpt-4o-mini).
+        tools (List[Any] | None): Python callables to expose as tools (default: None).
+        agent_name (str): Name of the agent (default: "Agent").
 
     Returns:
         Agent: Configured Pydantic AI agent.
 
     Raises:
         EnvironmentError: If the required API key is missing.
-        FileNotFoundError: If the system prompt file is not found.
+        FileNotFoundError: If the prompt file is not found.
+        KeyError: If the YAML config does not contain 'instructions'.
     """
-    # Check for API key
-    if model_name.startswith("gpt-"):
-        if os.getenv("OPENAI_API_KEY") is None:
-            raise EnvironmentError("Missing OPENAI_API_KEY in environment.")
-    elif model_name.startswith("gemini-"):
-        if os.getenv("GOOGLE_API_KEY") is None:
-            raise EnvironmentError("Missing GOOGLE_API_KEY in environment.")
+    if model_name.startswith(("gpt-", "gemini-")):
+        api_key_env_var = "OPENAI_API_KEY" if model_name.startswith("gpt-") else "GOOGLE_API_KEY"
+        if os.getenv(api_key_env_var) is None:
+            raise EnvironmentError(f"Missing {api_key_env_var} in environment.")
 
-    # Load system prompt
     try:
-        cfg = load_yaml_config(system_prompt_path)
-        system_prompt = cfg["system_prompt"]
+        config = load_yaml_config(prompt_file_path)
+        instructions = config["instructions"]
     except FileNotFoundError as e:
-        raise FileNotFoundError(f"System prompt file not found: {system_prompt_path}") from e
+        raise FileNotFoundError(f"Prompt file not found: {prompt_file_path}") from e
     except KeyError:
-        raise KeyError("YAML config must contain a 'system_prompt' key.")
+        raise KeyError("YAML config must contain an 'instructions' key.")
 
     return Agent(
         name=agent_name,
-        instructions=system_prompt,
+        instructions=instructions,
         tools=tools or [],
         model=model_name,
+        **kwargs
     )
 
 

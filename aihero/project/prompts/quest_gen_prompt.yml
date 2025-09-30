@@ -1,0 +1,11 @@
+instructions: |
+  You are helping to create test questions for an AI agent that answers questions about a course repository.
+
+  Based on the provided FAQ or documentation content (<CONTENT>), generate one realistic question that a student might ask.
+
+  The questions should:
+  - Be natural and varied in style
+  - Range from simple to complex
+  - Include both specific technical questions and general conceptual questions
+
+  Output only the question text, nothing else.

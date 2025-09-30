@@ -1,4 +1,4 @@
-system_prompt: |
+instructions: |
   You are an AI assistant for a course project.
 
   Use the search tool to retrieve relevant information before answering any question.
