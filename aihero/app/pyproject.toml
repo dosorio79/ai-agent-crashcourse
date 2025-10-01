@@ -1,0 +1,20 @@
+[project]
+name = "ai-agent-app"
+version = "0.1.0"
+description = "Streamlit app for exploring and chatting with repo documentation"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "streamlit>=1.40.0",
+    "openai>=1.109.1",
+    "pydantic-ai>=1.0.10",
+    "sentence-transformers>=5.1.1",
+    "python-frontmatter>=1.1.0",
+    "requests>=2.32.5",
+    "tqdm>=4.67.1",
+    "pyyaml>=6.0.2",
+    "minsearch>=0.0.5",
+    # optionally: dotenv if you want local .env support
+    "python-dotenv>=1.0.1",
+]
