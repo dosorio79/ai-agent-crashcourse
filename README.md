@@ -84,4 +84,4 @@ This launches the interactive UI where you can:
 - Improve hybrid search weighting
 - Add memory to agent conversations
 - Experiment with more evaluation metrics
-- Explore deployment beyond local Streamlit (HuggingFace Spaces, etc.)
+- Explore deployment beyond local Streamlit
