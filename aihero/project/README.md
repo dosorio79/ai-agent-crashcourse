@@ -11,7 +11,7 @@ Each day adds new functionality toward building an ingestion and retrieval pipel
 - [Day 3 - Search](#day-3---search)
 - [Day 4 - Agent and Tools](#day-4---agent-and-tools)
 - [Day 5 - Evaluation](#day-5---evaluation)
-
+- [Day 6 - Building the App](#day-6---building-the-app)
 ---
 
 # Day 1 - Ingest and Index Your Data
@@ -318,7 +318,7 @@ Run evaluation interactively in the notebook:
 jupyter notebook notebooks/agent_eval.ipynb
 ```
 
-# Day 6 — Building the App
+# Day 6 - Building the App
 
 ## 📌 Goal
 Turn the ingestion, chunking, search, and agent pipeline into an interactive application.
