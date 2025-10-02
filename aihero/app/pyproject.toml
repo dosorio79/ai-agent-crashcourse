@@ -17,4 +17,5 @@ dependencies = [
     "minsearch>=0.0.5",
     # optionally: dotenv if you want local .env support
     "python-dotenv>=1.0.1",
+    "yaspin>=3.2.0",
 ]
