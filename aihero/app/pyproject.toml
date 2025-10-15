@@ -1,6 +1,6 @@
 [project]
 name = "ai-agent-app"
-version = "0.1.0"
+version = "0.2.0"
 description = "Streamlit app for exploring and chatting with repo documentation"
 readme = "README.md"
 requires-python = ">=3.10"
